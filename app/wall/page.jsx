@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
-const GATEWAY = "http://1.12.60.90:3000";
+const GATEWAY = process.env.NEXT_PUBLIC_MCP_GATEWAY_URL || "http://1.12.60.90:3000";
 
 function formatTime(ts) {
   const d = new Date(ts);
