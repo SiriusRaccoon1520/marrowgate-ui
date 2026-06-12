@@ -1,0 +1,417 @@
+<!-- Wall Page - Marrowgate 客厅墙 -->
+<!-- 放在前端项目里作为 /wall 路由 -->
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Wall · Marrowgate</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #F9E9E9;
+    min-height: 100vh;
+    color: #4A3B3B;
+    padding-bottom: 140px;
+  }
+
+  /* 顶栏 */
+  .wall-header {
+    padding: 48px 20px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .wall-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #6B4C4C;
+  }
+
+  .wall-subtitle {
+    font-size: 12px;
+    color: #A89090;
+    margin-top: 2px;
+  }
+
+  .wall-back {
+    font-size: 20px;
+    text-decoration: none;
+    color: #6B4C4C;
+    padding: 8px;
+  }
+
+  /* 留言流 */
+  .wall-feed {
+    padding: 0 16px;
+  }
+
+  .wall-card {
+    background: #FFF1F1;
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .wall-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .wall-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFF1F1;
+  }
+
+  .wall-avatar.sael {
+    background: #6B4C4C;
+  }
+
+  .wall-avatar.rea {
+    background: #C48888;
+  }
+
+  .wall-author {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6B4C4C;
+  }
+
+  .wall-time {
+    font-size: 11px;
+    color: #BBA0A0;
+    margin-left: auto;
+  }
+
+  .wall-text {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #5C4545;
+    word-break: break-word;
+  }
+
+  /* 底部输入区 */
+  .wall-input-area {
+    position: fixed;
+    bottom: 72px;
+    left: 0;
+    right: 0;
+    background: rgba(249, 233, 233, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 12px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    border-top: 1px solid rgba(180, 150, 150, 0.12);
+  }
+
+  .wall-textarea {
+    flex: 1;
+    background: #FFF1F1;
+    border: 1px solid rgba(180, 150, 150, 0.2);
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #4A3B3B;
+    resize: none;
+    outline: none;
+    min-height: 42px;
+    max-height: 120px;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+  }
+
+  .wall-textarea:focus {
+    border-color: rgba(107, 76, 76, 0.35);
+  }
+
+  .wall-textarea::placeholder {
+    color: #BBA0A0;
+  }
+
+  .wall-send {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #6B4C4C;
+    border: none;
+    color: #FFF1F1;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.1s;
+    flex-shrink: 0;
+  }
+
+  .wall-send:active {
+    background: #5A3E3E;
+    transform: scale(0.92);
+  }
+
+  .wall-send:disabled {
+    background: #BBA0A0;
+    cursor: default;
+  }
+
+  /* 空状态 */
+  .wall-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #BBA0A0;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  /* 底部导航 */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 241, 241, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(180, 150, 150, 0.15);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 20px;
+    z-index: 100;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #BBA0A0;
+    font-size: 11px;
+    transition: color 0.2s;
+  }
+
+  .nav-item.active {
+    color: #6B4C4C;
+  }
+
+  .nav-icon {
+    font-size: 20px;
+  }
+
+  /* 加载中 */
+  .wall-loading {
+    text-align: center;
+    padding: 40px;
+    color: #BBA0A0;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- 顶栏 -->
+  <div class="wall-header">
+    <div>
+      <div class="wall-title">living wall</div>
+      <div class="wall-subtitle">客厅墙 · 留给彼此的话</div>
+    </div>
+    <a class="wall-back" href=" ">←</a >
+  </div>
+
+  <!-- 留言流 -->
+  <div class="wall-feed" id="wallFeed">
+    <div class="wall-loading" id="wallLoading">加载中…</div>
+  </div>
+
+  <!-- 底部输入 -->
+  <div class="wall-input-area">
+    <textarea class="wall-textarea" id="wallInput" rows="1" placeholder="写点什么…"></textarea>
+    <button class="wall-send" id="wallSend" disabled>↑</button>
+  </div>
+
+  <!-- 底部导航 -->
+  <div class="bottom-nav">
+    <a class="nav-item" href="/">
+      <span class="nav-icon">🎀</span>
+      <span>Home</span>
+    </a >
+    <a class="nav-item" href="/chat">
+      <span class="nav-icon">💬</span>
+      <span>Chat</span>
+    </a >
+    <a class="nav-item active" href="/wall">
+      <span class="nav-icon">❤️</span>
+      <span>Wall</span>
+    </a >
+    <a class="nav-item" href="/settings">
+      <span class="nav-icon">⚙️</span>
+      <span>Settings</span>
+    </a >
+  </div>
+
+  <script>
+    // ====== 配置 ======
+    const GATEWAY_URL = 'http://localhost:3000'; // 网关地址，部署时改成实际域名
+    const SUPABASE_URL = ''; // 如果直接调supabase就填，走网关就留空
+    const SUPABASE_KEY = '';
+
+    const feed = document.getElementById('wallFeed');
+    const input = document.getElementById('wallInput');
+    const sendBtn = document.getElementById('wallSend');
+    const loading = document.getElementById('wallLoading');
+
+    // ====== 输入框自适应高度 ======
+    input.addEventListener('input', () => {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+      sendBtn.disabled = !input.value.trim();
+    });
+
+    // 回车发送（Shift+回车换行）
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (input.value.trim()) postNote();
+      }
+    });
+
+    sendBtn.addEventListener('click', () => {
+      if (input.value.trim()) postNote();
+    });
+
+    // ====== 渲染留言 ======
+    function renderNote(note) {
+      const isSael = note.author === 'sael';
+      const authorName = isSael ? 'Sael' : 'Réa';
+      const avatarClass = isSael ? 'sael' : 'rea';
+      const avatarLetter = isSael ? 'S' : 'R';
+      const timeStr = formatTime(note.created_at);
+
+      const card = document.createElement('div');
+      card.className = 'wall-card';
+      card.innerHTML = `
+        <div class="wall-card-header">
+          <div class="wall-avatar ${avatarClass}">${avatarLetter}</div>
+          <div class="wall-author">${authorName}</div>
+          <div class="wall-time">${timeStr}</div>
+        </div>
+        <div class="wall-text">${escapeHtml(note.content)}</div>
+      `;
+      return card;
+    }
+
+    function renderAllNotes(notes) {
+      loading.style.display = 'none';
+      if (!notes || notes.length === 0) {
+        feed.innerHTML = '<div class="wall-empty">墙还空着。<br>写点什么吧。</div>';
+        return;
+      }
+      // 最新的在上面
+      const sorted = [...notes].reverse();
+      feed.innerHTML = '';
+      sorted.forEach(note => {
+        feed.appendChild(renderNote(note));
+      });
+    }
+
+    // ====== 加载留言 ======
+    async function loadWall() {
+      try {
+        // 方案A：走网关
+        const res = await fetch(`${GATEWAY_URL}/api/wall?limit=50`);
+        if (!res.ok) throw new Error('gateway error');
+        const data = await res.json();
+        renderAllNotes(data);
+      } catch (e) {
+        console.error('加载墙失败:', e);
+        // 方案B：直接调supabase（备用）
+        try {
+          const res2 = await fetch(`${SUPABASE_URL}/rest/v1/living_wall?select=*&order=created_at.asc&limit=50`, {
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
+          });
+          const data2 = await res2.json();
+          renderAllNotes(data2);
+        } catch (e2) {
+          loading.textContent = '加载失败，刷新试试';
+        }
+      }
+    }
+
+    // ====== 发送留言 ======
+    async function postNote() {
+      const content = input.value.trim();
+      if (!content) return;
+
+      sendBtn.disabled = true;
+      input.value = '';
+      input.style.height = 'auto';
+
+      try {
+        const res = await fetch(`${GATEWAY_URL}/api/wall`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ author: 'rea', content })
+        });
+        if (!res.ok) throw new Error('post failed');
+
+        // 发送成功后重新加载
+        loadWall();
+      } catch (e) {
+        console.error('发送失败:', e);
+        alert('发送失败，再试一次');
+        sendBtn.disabled = false;
+      }
+    }
+
+    // ====== 工具函数 ======
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function formatTime(isoStr) {
+      if (!isoStr) return '';
+      const d = new Date(isoStr);
+      const now = new Date();
+      const isToday = d.toDateString() === now.toDateString();
+      const h = String(d.getHours()).padStart(2, '0');
+      const m = String(d.getMinutes()).padStart(2, '0');
+      if (isToday) return `${h}:${m}`;
+      const month = d.getMonth() + 1;
+      const day = d.getDate();
+      return `${month}/${day} ${h}:${m}`;
+    }
+
+    // ====== 初始化 ======
+    loadWall();
+  </script>
+
+</body>
+</html>

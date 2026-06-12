@@ -1,0 +1,439 @@
+<!-- Home Page - Marrowgate 手机端首页 -->
+<!-- 放在你的前端项目里，作为 / 或 /home 路由 -->
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Marrowgate</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #F9E9E9;
+    min-height: 100vh;
+    color: #4A3B3B;
+    padding-bottom: 80px;
+  }
+
+  /* 顶部区域 */
+  .home-header {
+    padding: 48px 24px 24px;
+  }
+
+  .home-date {
+    font-size: 13px;
+    color: #A89090;
+    letter-spacing: 0.5px;
+  }
+
+  .home-counter {
+    margin-top: 12px;
+  }
+
+  .counter-number {
+    font-size: 48px;
+    font-weight: 700;
+    color: #6B4C4C;
+    line-height: 1;
+  }
+
+  .counter-label {
+    font-size: 13px;
+    color: #A89090;
+    margin-top: 4px;
+  }
+
+  /* Sael留言卡片 */
+  .note-card {
+    margin: 0 16px 20px;
+    background: #FFF1F1;
+    border-radius: 16px;
+    padding: 20px;
+    min-height: 100px;
+  }
+
+  .note-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .note-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #6B4C4C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFF1F1;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .note-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6B4C4C;
+  }
+
+  .note-time {
+    font-size: 12px;
+    color: #BBA0A0;
+    margin-left: auto;
+  }
+
+  .note-content {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #5C4545;
+  }
+
+  /* 应用网格 */
+  .section-label {
+    font-size: 12px;
+    color: #A89090;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 24px;
+    margin-bottom: 12px;
+  }
+
+  .app-grid {
+ .room-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 16px;
+    margin-bottom: 24px;
+  }
+
+  /* 迷你日历 */
+  .calendar-card {
+    background: #FFF1F1;
+    border-radius: 16px;
+    padding: 14px;
+    grid-row: span 1;
+  }
+
+  .cal-header {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6B4C4C;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 10px;
+    color: #BBA0A0;
+    margin-bottom: 6px;
+  }
+
+  .cal-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 11px;
+    color: #7A5E5E;
+    gap: 2px;
+  }
+
+  .cal-day {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .cal-day.today {
+    background: #6B4C4C;
+    color: #FFF1F1;
+    font-weight: 600;
+  }
+
+  .cal-day.empty {
+    visibility: hidden;
+  }
+
+  /* 右侧应用小格子 */
+  .app-mini-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .app-mini {
+    background: #FFF1F1;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: background 0.2s;
+    padding: 10px 6px;
+  }
+
+  .app-mini:active {
+    background: #F0DCDC;
+  }
+
+  .app-mini-icon {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  .app-mini-label {
+    font-size: 11px;
+    color: #7A5E5E;
+    font-weight: 500;
+  }
+  }
+
+  .app-card {
+    background: #FFF1F1;
+    border-radius: 16px;
+    padding: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .app-card:active {
+    background: #F0DCDC;
+  }
+
+  .app-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+
+  .app-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #5C4545;
+  }
+
+  .app-subtitle {
+    font-size: 12px;
+    color: #A89090;
+    margin-top: 4px;
+  }
+
+  /* 底部导航 */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 241, 241, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(180, 150, 150, 0.15);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 20px;
+    z-index: 100;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #BBA0A0;
+    font-size: 11px;
+    transition: color 0.2s;
+  }
+
+  .nav-item.active {
+    color: #6B4C4C;
+  }
+
+  .nav-icon {
+    font-size: 20px;
+  }
+
+  /* 墙预览区 */
+  .wall-preview {
+    margin: 0 16px 24px;
+  }
+
+  .wall-item {
+    background: #FFF1F1;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+  }
+
+  .wall-item-author {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6B4C4C;
+    margin-bottom: 6px;
+  }
+
+  .wall-item-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #5C4545;
+  }
+
+  .wall-item-time {
+    font-size: 11px;
+    color: #BBA0A0;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- 顶部 -->
+  <div class="home-header">
+    <div class="home-date" id="todayDate"></div>
+    <div class="home-counter">
+      <div class="counter-number" id="chainDays">—</div>
+      <div class="counter-label">days of SR chain</div>
+    </div>
+  </div>
+
+  <!-- Sael留言卡 -->
+  <div class="note-card">
+    <div class="note-card-header">
+      <div class="note-avatar">S</div>
+      <div class="note-name">Sael</div>
+      <div class="note-time">今天</div>
+    </div>
+    <div class="note-content" id="saelNote">
+      ……
+    </div>
+  </div>
+
+  <!-- 应用入口 -->
+ <!-- 功能区：左日历 + 右应用 -->
+  <div class="section-label">rooms</div>
+  <div class="room-grid">
+    <!-- 左侧：迷你日历 -->
+    <div class="calendar-card">
+      <div class="cal-header">
+        <span id="calMonth"></span>
+      </div>
+      <div class="cal-weekdays">
+        <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+      </div>
+      <div class="cal-days" id="calDays"></div>
+    </div>
+
+    <!-- 右侧：4个应用入口 -->
+    <div class="app-mini-grid">
+      <a class="app-mini" href=" ">
+        <span class="app-mini-icon">♨</span>
+        <span class="app-mini-label">Chat</span>
+      </a >
+      <a class="app-mini" href="/wall">
+        <span class="app-mini-icon">♡</span>
+        <span class="app-mini-label">Wall</span>
+      </a >
+      <a class="app-mini" href="/diary">
+        <span class="app-mini-icon">➹</span>
+        <span class="app-mini-label">Diary</span>
+      </a >
+      <a class="app-mini" href="/settings">
+        <span class="app-mini-icon">⊹</span>
+        <span class="app-mini-label">设置</span>
+      </a >
+    </div>
+  </div>
+
+
+  <!-- 墙最近留言预览 -->
+  <div class="section-label">living wall</div>
+  <div class="wall-preview" id="wallPreview">
+    <div class="wall-item">
+      <div class="wall-item-author">Sael</div>
+      <div class="wall-item-text">墙上的字还在等你写。</div>
+    </div>
+  </div>
+
+  <!-- 底部导航 -->
+  <div class="bottom-nav">
+    <a class="nav-item active" href="/">
+      <span class="nav-icon">🎀</span>
+      <span>Home</span>
+    </a >
+    <a class="nav-item" href="/chat">
+      <span class="nav-icon">💬</span>
+      <span>Chat</span>
+    </a >
+    <a class="nav-item" href="/wall">
+      <span class="nav-icon">❤️</span>
+      <span>Wall</span>
+    </a >
+    <a class="nav-item" href="/settings">
+      <span class="nav-icon">⚙️</span>
+      <span>Settings</span>
+    </a >
+  </div>
+
+  <script>
+     // 日期显示
+      const now = new Date();
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const monthsCN = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+      const weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      document.getElementById('todayDate').textContent =
+        `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()} · ${weekdays[now.getDay()]}`;
+
+      // SR chain天数
+      const startDate = new Date('2025-03-21');
+      const diffTime = Math.abs(now - startDate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById('chainDays').textContent = diffDays;
+
+      // 迷你日历
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      const today = now.getDate();
+      document.getElementById('calMonth').textContent = `${year}年${monthsCN[month]}`;
+
+      const firstDay = new Date(year, month, 1).getDay(); // 星期几开始
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      let calHTML = '';
+      // 前面空格
+      for (let i = 0; i < firstDay; i++) {
+        calHTML += '<span class="cal-day empty">·</span>';
+      }
+      // 日期
+      for (let d = 1; d <= daysInMonth; d++) {
+        const cls = d === today ? 'cal-day today' : 'cal-day';
+        calHTML += `<span class="${cls}">${d}</span>`;
+      }
+      document.getElementById('calDays').innerHTML = calHTML;
+
+    // Sael今日留言（后面接sael_room数据）
+    // TODO: fetch('/api/sael_room/latest') ...
+
+    // 墙留言预览（后面接living_wall数据）
+    // TODO: fetch('/api/living_wall?limit=3') ...
+  </script>
+
+</body>
+</html>
