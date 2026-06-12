@@ -1,11 +1,29 @@
 'use client';
 import { useState, useEffect } from 'react';
 
+type Particle = {
+  id: number;
+  left: number;
+  size: number;
+  delay: number;
+  duration: number;
+  opacity: number;
+};
+
+type Heart = {
+  id: number;
+  left: number;
+  size: number;
+  delay: number;
+  duration: number;
+  color: string;
+};
+
 export default function Home() {
     const [mounted, setMounted] = useState(false);
-    const [hearts, setHearts] = useState([]);
+    const [hearts, setHearts] = useState<Heart[]>([]);
     const [missed, setMissed] = useState(false);
-    const [particles, setParticles] = useState([]);
+    const [particles, setParticles] = useState<Particle[]>([]);
 
     useEffect(() => {
       setMounted(true);
