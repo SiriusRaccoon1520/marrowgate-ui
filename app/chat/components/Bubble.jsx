@@ -255,4 +255,3 @@ function areEqual(prev, next) {
 const Bubble = memo(BubbleInner, areEqual);
 
 export default Bubble;
-}
